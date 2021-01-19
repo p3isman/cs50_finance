@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Portfolio
+{% endblock %}
+
+{% block main %}
+    <table class="table table-striped mt-5">
+        <tr>
+            <th scope="col">Symbol</th>
+            <th scope="col">Price</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Total Value</th>
+        </tr>
+        {% for share in shares %}
+        {% set price = lookup(share["symbol"])["price"] %}
+        <tr>
+            <td scope="row">{{share["symbol"]}}</td>
+            <td scope="row">{{"$%.2f"|format(price)}}</td>
+            <td scope="row">{{share["shares"]}}</td>
+            <td scope="row">{{"$%.2f"|format(price * share["shares"])}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

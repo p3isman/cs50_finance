@@ -5,16 +5,15 @@
 {% endblock %}
 
 {% block main %}
-    <table class="table">
+    <h1>{{name}}</h1>
+    <table class="table table-striped mt-5">
         <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Price</th>
             <th scope="col">Symbol</th>
+            <th scope="col">Price</th>
         </tr>
         <tr>
-            <td>{{name}}</td>
-            <td>{{price}}</td>
-            <td>{{symbol}}</td>
+            <td scope="row">{{symbol}}</td>
+            <td scope="row">{{"$%.2f"|format(price)}}</td>
         </tr>
     </table>
 {% endblock %}

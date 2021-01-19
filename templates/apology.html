@@ -4,6 +4,18 @@
     Apology
 {% endblock %}
 
+{% block script %}
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
+{% endblock %}
+
 {% block main %}
-    <img alt="{{ top }}" class="border" src="http://memegen.link/custom/{{ top | urlencode }}/{{ bottom | urlencode }}.jpg?alt=https://i.imgur.com/CsCgN7Ll.png" title="{{ top }}">
+    <div class="alert alert-danger" role="alert">
+        <h2>Error {{top}}</h2>
+        <p class="my-4">{{bottom}}</p>
+        <button class="btn btn-danger" onclick="goBack()">Go Back</button>
+    </div>
 {% endblock %}
