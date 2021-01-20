@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    History
+{% endblock %}
+
+{% block main %}
+    <table class="table table-striped mt-5">
+        <tr>
+            <th scope="col">Symbol</th>
+            <th scope="col">Operation</th>
+            <th scope="col">Value</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Time</th>
+            <th scope="col">Total Value</th>
+
+        </tr>
+        {% for share in shares %}
+        <tr>
+            <td scope="row">{{share["symbol"]}}</td>
+            {% if share["shares"] > 0 %}
+                <td scope="row">Buy</td>
+            {% else %}
+                <td scope="row">Sell</td>
+            {% endif %}
+            <td scope="row">{{"$%.2f"|format(share["price"])}}</td>
+            <td scope="row">{{share["shares"]|abs}}</td>
+            <td scope="row">{{share["time"][0:-3]}}</td>
+            <td scope="row">{{"$%.2f"|format(share["price"] * share["shares"]|abs)}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

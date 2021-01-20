@@ -6,6 +6,7 @@ from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
 from helpers import apology, login_required, lookup, usd
+from datetime import datetime
 
 # Configure application
 app = Flask(__name__)
@@ -26,6 +27,7 @@ db = SQL('sqlite:///finance.db')
 
 # Custom filter
 app.add_template_filter(usd)
+app.add_template_filter(abs)
 
 # Configure session to use filesystem (instead of signed cookies)
 app.config["SESSION_FILE_DIR"] = mkdtemp()
@@ -83,9 +85,10 @@ def buy():
 @app.route("/history")
 @login_required
 def history():
-    """Show history of transactions"""
-    return apology("TODO")
+    shares = db.execute("""SELECT * FROM transactions WHERE user_id = :user_id ORDER BY time DESC""",
+        user_id=session["user_id"])
 
+    return render_template("history.html", shares=shares)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -184,11 +187,11 @@ def sell():
     if request.method == "POST":
 
         symbol = request.form.get("quote")
-        price = lookup(symbol)["price"]
 
-        if not price or type(price) is not float:
+        if not symbol:
             return apology("Can't find quote!")
 
+        price = lookup(symbol)["price"]
         amount = int(request.form.get("amount"))
         rows = db.execute("SELECT * FROM users WHERE id = :id", id=session["user_id"])
         cash = rows[0]["cash"]
